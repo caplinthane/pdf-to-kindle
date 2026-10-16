@@ -44,10 +44,14 @@ def main():
 
         cleaned_pages.append(cleaned_blocks)
 
-    print("Number of processed pages:", len(cleaned_blocks))
+    print("Number of processed pages:", len(cleaned_pages))
 
-    for number, page_blocks in enumerate(cleaned_pages):
-        print(f"Page {number + 1}: {len(page_blocks)} blocks")
+    page_number = 10
+
+    print(f"\nInspecting page {page_number + 1}:")
+
+    for block_number, block in enumerate(cleaned_pages[page_number]):
+        print(f"Block {block_number}: {block!r}")
 
 
 if __name__ == "__main__":
