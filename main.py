@@ -8,24 +8,7 @@ def main():
     # opens pdf file
     document = pymupdf.open(filename)
 
-    # creates empty python list
-    pages = []
-
-    # prints the actual pdf text
-    for page in document:
-        text = page.get_text()
-        # takes text from page and puts it in the list
-        pages.append(text)
-
-    print("Number of pages:", len(pages))
-
-    for number, page in enumerate(pages):
-        if len(page) == 0:
-            print("Empty page:", number)
-
-    # retrieve eleventh page
-    # calls pymupdf layout blocks
-    # avoids one long string of text
+    # array to store cleaned text blocks on each pdf page
     cleaned_pages = []
 
     for page in document:
@@ -34,8 +17,9 @@ def main():
 
         # each block processed in turn
         for block in blocks:
-            x0, y0, x1, y1, text, block_number, block_type = block
+            text = block[4]
 
+            # replace pdf symbols and whitespace
             cleaned_text = text.strip()
             cleaned_text = cleaned_text.replace("\x07", "")
 
@@ -44,14 +28,16 @@ def main():
 
         cleaned_pages.append(cleaned_blocks)
 
+    print("Number of pages:", len(document))
     print("Number of processed pages:", len(cleaned_pages))
 
     page_number = 10
 
-    print(f"\nInspecting page {page_number + 1}:")
+    if page_number < len(cleaned_pages):
+        print(f"\nInspecting page {page_number + 1}:")
 
-    for block_number, block in enumerate(cleaned_pages[page_number]):
-        print(f"Block {block_number}: {block!r}")
+        for block_number, block in enumerate(cleaned_pages[page_number]):
+            print(f"Block {block_number}: {block!r}")
 
 
 if __name__ == "__main__":
